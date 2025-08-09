@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { hashPassword } from "../../../utils/encrypt";
 
 export const userSchema = new Schema(
   {
@@ -21,5 +22,11 @@ export const userSchema = new Schema(
     collection: "users",
   }
 );
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await hashPassword(this.password);
+  next();
+});
 
 export const UserModel = model("User", userSchema);

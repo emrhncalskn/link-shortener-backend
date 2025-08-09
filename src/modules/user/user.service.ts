@@ -1,4 +1,3 @@
-import { hashPassword } from "../../utils/encrypt";
 import { httpException } from "../../utils/response";
 import { UserModel } from "./schema/user.model";
 import { CreateUserInput, User, UserResponse } from "./schema/user.types";
@@ -48,7 +47,6 @@ export class UserService {
 
     try {
       const user = new UserModel(userData);
-      user.password = await hashPassword(userData.password);
       const savedUser = await user.save();
 
       return {
@@ -69,9 +67,6 @@ export class UserService {
     const user = await UserModel.findById(id).exec();
     if (!user) {
       throw httpException.notFound("User not found");
-    }
-    if (userData.password) {
-      userData.password = await hashPassword(userData.password);
     }
     Object.assign(user, userData);
     try {
