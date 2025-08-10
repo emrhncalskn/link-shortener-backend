@@ -1,26 +1,27 @@
 import { z } from "zod";
+import { ERROR_MESSAGES } from "../../../constants/error-messages.constant";
 
 export const createLinkSchema = z.object({
   body: z.object({
     originalUrl: z
       .string()
-      .url("Please provide a valid URL")
-      .min(1, "URL is required"),
+      .url(ERROR_MESSAGES.INVALID_URL)
+      .min(1, ERROR_MESSAGES.URL_REQUIRED),
     customCode: z
       .string()
-      .min(3, "Custom code must be at least 3 characters")
-      .max(20, "Custom code must be at most 20 characters")
-      .regex(
-        /^[a-zA-Z0-9-_]+$/,
-        "Custom code can only contain letters, numbers, hyphens and underscores"
-      )
+      .min(3, ERROR_MESSAGES.CUSTOM_CODE_MIN_LENGTH)
+      .max(20, ERROR_MESSAGES.CUSTOM_CODE_MAX_LENGTH)
+      .regex(/^[a-zA-Z0-9-_]+$/, ERROR_MESSAGES.CUSTOM_CODE_INVALID_CHARS)
       .optional(),
   }),
 });
 
 export const redirectLinkSchema = z.object({
   params: z.object({
-    slug: z.string().min(1, "Slug is required").max(20, "Slug is too long"),
+    slug: z
+      .string()
+      .min(1, ERROR_MESSAGES.SLUG_REQUIRED)
+      .max(20, ERROR_MESSAGES.SLUG_TOO_LONG),
   }),
 });
 
@@ -28,16 +29,16 @@ export const updateLinkSchema = z.object({
   body: z.object({
     newShortCode: z
       .string()
-      .min(3, "New short code must be at least 3 characters")
-      .max(20, "New short code must be at most 20 characters")
-      .regex(
-        /^[a-zA-Z0-9-_]+$/,
-        "New short code can only contain letters, numbers, hyphens and underscores"
-      )
+      .min(3, ERROR_MESSAGES.NEW_SHORT_CODE_MIN_LENGTH)
+      .max(20, ERROR_MESSAGES.NEW_SHORT_CODE_MAX_LENGTH)
+      .regex(/^[a-zA-Z0-9-_]+$/, ERROR_MESSAGES.NEW_SHORT_CODE_INVALID_CHARS)
       .optional(),
   }),
   params: z.object({
-    slug: z.string().min(1, "Slug is required").max(20, "Slug is too long"),
+    slug: z
+      .string()
+      .min(1, ERROR_MESSAGES.SLUG_REQUIRED)
+      .max(20, ERROR_MESSAGES.SLUG_TOO_LONG),
   }),
 });
 

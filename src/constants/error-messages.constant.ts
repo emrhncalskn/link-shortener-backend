@@ -60,6 +60,22 @@ export const ERROR_MESSAGES = {
   INVALID_PAGE_NUMBER: "Geçersiz sayfa numarası",
   INVALID_LIMIT: "Geçersiz limit değeri",
 
+  // Schema validation errors
+  USERNAME_MIN_LENGTH: "Kullanıcı adı en az 3 karakter olmalıdır",
+  PASSWORD_MIN_LENGTH: "Şifre en az 6 karakter olmalıdır",
+  URL_REQUIRED: "URL gereklidir",
+  INVALID_URL: "Geçerli bir URL giriniz",
+  CUSTOM_CODE_MIN_LENGTH: "Özel kod en az 3 karakter olmalıdır",
+  CUSTOM_CODE_MAX_LENGTH: "Özel kod en fazla 20 karakter olmalıdır",
+  CUSTOM_CODE_INVALID_CHARS:
+    "Özel kod sadece harf, rakam, tire ve alt çizgi içerebilir",
+  SLUG_REQUIRED: "Slug gereklidir",
+  SLUG_TOO_LONG: "Slug çok uzun",
+  NEW_SHORT_CODE_MIN_LENGTH: "Yeni kısa kod en az 3 karakter olmalıdır",
+  NEW_SHORT_CODE_MAX_LENGTH: "Yeni kısa kod en fazla 20 karakter olmalıdır",
+  NEW_SHORT_CODE_INVALID_CHARS:
+    "Yeni kısa kod sadece harf, rakam, tire ve alt çizgi içerebilir",
+
   // Success messages
   AUTHENTICATED: "Kimlik doğrulandı",
 } as const;
