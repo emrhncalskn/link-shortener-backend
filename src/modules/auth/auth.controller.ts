@@ -20,4 +20,12 @@ export class AuthController extends BaseController {
       return await this.authService.register(username, password);
     });
   };
+
+  checkAuth = async (req: Request, res: Response): Promise<void> => {
+    await this.handleRequest(req, res, async () => {
+      return {
+        message: "Authenticated",
+      };
+    });
+  };
 }
