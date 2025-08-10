@@ -65,20 +65,19 @@ Kimlik doğrulama gereken endpointler Authorization: `Bearer <JWT>` başlığı 
 
 ### Auth
 
-| Method | Path           | Auth  | Açıklama                             | Body                   |
-| ------ | -------------- | ----- | ------------------------------------ | ---------------------- |
-| POST   | /auth/register | Hayır | Yeni kullanıcı oluşturur & JWT döner | { username, password } |
-| POST   | /auth/login    | Hayır | Giriş yapar & JWT döner              | { username, password } |
-| GET    | /auth/check    | Evet  | Authenticated mı?                    | -                      |
+| Method | Path                | Auth  | Açıklama                                | Body                         |
+| ------ | ------------------- | ----- | --------------------------------------- | ---------------------------- |
+| POST   | /auth/register      | Hayır | Yeni kullanıcı oluşturur & JWT döner    | { username, password }       |
+| POST   | /auth/login         | Hayır | Giriş yapar & JWT döner                 | { username, password }       |
+| GET    | /auth/check         | Evet  | Authenticated mı?                       | -                            |
 
 ### User
 
-| Method | Path      | Auth  | Açıklama                                        | Body                     |
-| ------ | --------- | ----- | ----------------------------------------------- | ------------------------ |
-| GET    | /user/all | Hayır | (Demo) tüm kullanıcıları listeler (şifre hariç) | -                        |
-| GET    | /user     | Evet  | Oturum açmış kullanıcının bilgisi               | -                        |
-| PUT    | /user     | Evet  | Kullanıcıyı günceller                           | { username?, password? } |
-| DELETE | /user     | Evet  | Kullanıcıyı siler                               | -                        |
+| Method | Path                | Auth  | Açıklama                                | Body                         |
+| ------ | ------------------- | ----- | --------------------------------------- | ---------------------------- |
+| GET    | /user               | Evet  | Oturum açmış kullanıcının bilgisi       | -                            |
+| PUT    | /user               | Evet  | Kullanıcıyı günceller                   | { username?, password? }     |
+| DELETE | /user               | Evet  | Kullanıcıyı siler                       | -                            |
 
 ### Link
 
