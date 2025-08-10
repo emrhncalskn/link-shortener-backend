@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodObject, ZodRawShape, ZodError } from "zod";
 import { ApiResponse } from "./response";
+import { ERROR_MESSAGES } from "../constants/error-messages.constant";
 
 export const validate =
   (schema: ZodObject<ZodRawShape>) =>
@@ -26,7 +27,7 @@ export const validate =
 
         ApiResponse.error(res, errorMessage, 400);
       } else {
-        ApiResponse.error(res, "Validation error", 400);
+        ApiResponse.error(res, ERROR_MESSAGES.VALIDATION_ERROR, 400);
       }
     }
   };

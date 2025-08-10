@@ -2,6 +2,7 @@ import { CHARS } from "../../constants/chars.constant";
 import { httpException, HttpException } from "../../utils/response";
 import { LinkClickModel, LinkModel } from "./schema/link.model";
 import { CreateLinkInput, LinkClick, LinkResponse } from "./schema/link.types";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class LinkService {
   private generateShortCode(length: number = 10): string {
@@ -18,7 +19,7 @@ export class LinkService {
         .lean()
         .exec();
       if (existing) {
-        throw httpException.conflict("Custom code already exists");
+        throw httpException.conflict(ERROR_MESSAGES.CUSTOM_CODE_ALREADY_EXISTS);
       }
       return customCode;
     }
@@ -37,7 +38,7 @@ export class LinkService {
     } while (attempts < maxAttempts);
 
     throw httpException.internalServerError(
-      "Could not generate unique short code, please try again later"
+      ERROR_MESSAGES.COULD_NOT_GENERATE_UNIQUE_SHORT_CODE
     );
   }
 
@@ -73,7 +74,9 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw httpException.internalServerError("Failed to create link");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_CREATE_LINK
+      );
     }
   }
 
@@ -90,7 +93,7 @@ export class LinkService {
       ).exec();
 
       if (!link) {
-        throw httpException.notFound("Link not found");
+        throw httpException.notFound(ERROR_MESSAGES.LINK_NOT_FOUND);
       }
 
       await this.countClick(link._id.toString(), ipAddress, userAgent);
@@ -100,7 +103,9 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw httpException.internalServerError("Failed to redirect link");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_REDIRECT_LINK
+      );
     }
   }
 
@@ -117,7 +122,7 @@ export class LinkService {
       });
       await click.save();
     } catch (error) {
-      console.error("Failed to log click:", error);
+      console.error(ERROR_MESSAGES.FAILED_TO_LOG_CLICK, error);
     }
   }
 
@@ -155,7 +160,9 @@ export class LinkService {
         totalPages,
       };
     } catch (error) {
-      throw httpException.internalServerError("Failed to retrieve links");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_RETRIEVE_LINKS
+      );
     }
   }
 
@@ -171,7 +178,7 @@ export class LinkService {
 
       const link = await LinkModel.findOne(filter).lean().exec();
       if (!link) {
-        throw httpException.notFound("Link not found");
+        throw httpException.notFound(ERROR_MESSAGES.LINK_NOT_FOUND);
       }
 
       const recentClicks = await LinkClickModel.find({ linkId: link._id })
@@ -188,7 +195,7 @@ export class LinkService {
         throw error;
       }
       throw httpException.internalServerError(
-        "Failed to retrieve link statistics"
+        ERROR_MESSAGES.FAILED_TO_GET_LINK_ANALYTICS
       );
     }
   }
@@ -206,7 +213,7 @@ export class LinkService {
 
       const existingLink = await LinkModel.findOne(filter).exec();
       if (!existingLink) {
-        throw httpException.notFound("Link not found");
+        throw httpException.notFound(ERROR_MESSAGES.LINK_NOT_FOUND);
       }
 
       if (newShortCode && newShortCode !== shortCode) {
@@ -214,7 +221,9 @@ export class LinkService {
           shortCode: newShortCode,
         }).exec();
         if (existingCodeLink) {
-          throw httpException.conflict("New short code already exists");
+          throw httpException.conflict(
+            ERROR_MESSAGES.CUSTOM_CODE_ALREADY_EXISTS
+          );
         }
       }
 
@@ -224,7 +233,7 @@ export class LinkService {
         { new: true }
       ).exec();
       if (!updatedLink) {
-        throw httpException.notFound("Link not found");
+        throw httpException.notFound(ERROR_MESSAGES.LINK_NOT_FOUND);
       }
 
       return this.formatLinkResponse(updatedLink);
@@ -232,7 +241,9 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw httpException.internalServerError("Failed to update link");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_UPDATE_LINK
+      );
     }
   }
 
@@ -245,7 +256,7 @@ export class LinkService {
 
       const link = await LinkModel.findOneAndDelete(filter).exec();
       if (!link) {
-        throw httpException.notFound("Link not found");
+        throw httpException.notFound(ERROR_MESSAGES.LINK_NOT_FOUND);
       }
 
       await LinkClickModel.deleteMany({ linkId: link._id }).exec();
@@ -253,7 +264,9 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw httpException.internalServerError("Failed to delete link");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_DELETE_LINK
+      );
     }
   }
 }

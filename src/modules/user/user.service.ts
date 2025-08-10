@@ -2,6 +2,7 @@ import { decode } from "jsonwebtoken";
 import { httpException } from "../../utils/response";
 import { UserModel } from "./schema/user.model";
 import { CreateUserInput, User, UserResponse } from "./schema/user.types";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class UserService {
   async getSelfUser(userId: string): Promise<UserResponse> {
@@ -10,7 +11,7 @@ export class UserService {
       .lean()
       .exec();
     if (!user) {
-      throw httpException.notFound("User not found");
+      throw httpException.notFound(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     return {
@@ -28,7 +29,7 @@ export class UserService {
   async createUser(userData: CreateUserInput): Promise<UserResponse> {
     const isExist = await this.getUserByUsername(userData.username);
     if (isExist) {
-      throw httpException.conflict("User already exists.");
+      throw httpException.conflict(ERROR_MESSAGES.USER_ALREADY_EXISTS);
     }
 
     try {
@@ -42,7 +43,9 @@ export class UserService {
         updatedAt: savedUser.updatedAt,
       };
     } catch (error) {
-      throw httpException.internalServerError("Failed to create user");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_CREATE_USER
+      );
     }
   }
 
@@ -52,7 +55,7 @@ export class UserService {
   ): Promise<UserResponse> {
     const user = await UserModel.findById(userId).exec();
     if (!user) {
-      throw httpException.notFound("User not found");
+      throw httpException.notFound(ERROR_MESSAGES.USER_NOT_FOUND);
     }
     Object.assign(user, userData);
     try {
@@ -64,7 +67,9 @@ export class UserService {
         updatedAt: updatedUser.updatedAt,
       };
     } catch (error) {
-      throw httpException.internalServerError("Failed to update user");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_UPDATE_USER
+      );
     }
   }
 
@@ -74,7 +79,9 @@ export class UserService {
       await UserModel.findByIdAndDelete(user._id).exec();
       return;
     } catch (error) {
-      throw httpException.internalServerError("Failed to delete user");
+      throw httpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_DELETE_USER
+      );
     }
   }
 }

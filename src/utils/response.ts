@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { ERROR_MESSAGES } from "../constants/error-messages.constant";
 
 export class ApiResponse {
   // Success response
@@ -56,36 +57,42 @@ export class HttpException extends Error {
 
   // Static factory methods for common HTTP errors
   static badRequest(
-    message: string = "Bad Request",
+    message: string = ERROR_MESSAGES.BAD_REQUEST,
     details?: any
   ): HttpException {
     return new HttpException(message, 400, details);
   }
 
   static unauthorized(
-    message: string = "Unauthorized",
+    message: string = ERROR_MESSAGES.UNAUTHORIZED_ACCESS,
     details?: any
   ): HttpException {
     return new HttpException(message, 401, details);
   }
 
   static forbidden(
-    message: string = "Forbidden",
+    message: string = ERROR_MESSAGES.FORBIDDEN,
     details?: any
   ): HttpException {
     return new HttpException(message, 403, details);
   }
 
-  static notFound(message: string = "Not Found", details?: any): HttpException {
+  static notFound(
+    message: string = ERROR_MESSAGES.USER_NOT_FOUND,
+    details?: any
+  ): HttpException {
     return new HttpException(message, 404, details);
   }
 
-  static conflict(message: string = "Conflict", details?: any): HttpException {
+  static conflict(
+    message: string = ERROR_MESSAGES.CONFLICT,
+    details?: any
+  ): HttpException {
     return new HttpException(message, 409, details);
   }
 
   static internalServerError(
-    message: string = "Internal Server Error",
+    message: string = ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
     details?: any
   ): HttpException {
     return new HttpException(message, 500, details);

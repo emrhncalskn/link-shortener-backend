@@ -2,6 +2,7 @@ import { sign } from "jsonwebtoken";
 import { comparePassword } from "../../utils/encrypt";
 import { HttpException } from "../../utils/response";
 import { UserService } from "../user/user.service";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class AuthService {
   private userService: UserService;
@@ -14,11 +15,11 @@ export class AuthService {
     try {
       const user = await this.userService.getUserByUsername(username);
       if (!user) {
-        throw HttpException.notFound("User not found");
+        throw HttpException.notFound(ERROR_MESSAGES.USER_NOT_FOUND);
       }
       const isPasswordValid = await comparePassword(password, user.password);
       if (!isPasswordValid) {
-        throw HttpException.unauthorized("Invalid credentials");
+        throw HttpException.unauthorized(ERROR_MESSAGES.INVALID_CREDENTIALS);
       }
       const token = sign(
         { id: user._id, username: user.username },
@@ -31,7 +32,7 @@ export class AuthService {
       if (err instanceof HttpException) {
         throw err;
       }
-      throw HttpException.internalServerError("Failed to login");
+      throw HttpException.internalServerError(ERROR_MESSAGES.FAILED_TO_LOGIN);
     }
   }
 
@@ -42,7 +43,9 @@ export class AuthService {
         password,
       });
       if (!newUser) {
-        throw HttpException.internalServerError("Failed to create user");
+        throw HttpException.internalServerError(
+          ERROR_MESSAGES.FAILED_TO_CREATE_USER
+        );
       }
       const token = sign(
         { id: newUser._id, username: newUser.username },
@@ -63,7 +66,9 @@ export class AuthService {
       if (err instanceof HttpException) {
         throw err;
       }
-      throw HttpException.internalServerError("Failed to register user");
+      throw HttpException.internalServerError(
+        ERROR_MESSAGES.FAILED_TO_REGISTER
+      );
     }
   }
 }

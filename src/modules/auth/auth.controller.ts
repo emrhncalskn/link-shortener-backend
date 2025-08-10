@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../common/base.controller";
 import { AuthService } from "./auth.service";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class AuthController extends BaseController {
   constructor(private authService: AuthService) {
@@ -24,7 +25,7 @@ export class AuthController extends BaseController {
   checkAuth = async (req: Request, res: Response): Promise<void> => {
     await this.handleRequest(req, res, async () => {
       return {
-        message: "Authenticated",
+        message: ERROR_MESSAGES.AUTHENTICATED,
       };
     });
   };

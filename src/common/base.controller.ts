@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ApiResponse, HttpException } from "../utils/response";
+import { ERROR_MESSAGES } from "../constants/error-messages.constant";
 
 export abstract class BaseController {
   protected async handleRequest(
@@ -16,7 +17,7 @@ export abstract class BaseController {
       } else if (err instanceof Error) {
         ApiResponse.error(res, err.message, 500);
       } else {
-        ApiResponse.error(res, "An unexpected error occurred", 500);
+        ApiResponse.error(res, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, 500);
       }
     }
   }
