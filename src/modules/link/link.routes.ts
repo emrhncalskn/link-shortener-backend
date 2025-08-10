@@ -17,7 +17,7 @@ router.post(
   linkController.shortenUrl
 );
 
-router.get("/list", authGuard, linkController.getAllLinks);
+router.get("/links", authGuard, linkController.getAllLinks);
 
 router.get(
   "/stats/:slug",
