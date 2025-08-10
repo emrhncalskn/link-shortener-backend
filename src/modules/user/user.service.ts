@@ -4,23 +4,6 @@ import { UserModel } from "./schema/user.model";
 import { CreateUserInput, User, UserResponse } from "./schema/user.types";
 
 export class UserService {
-  async getAllUsers(page = 1, limit = 10): Promise<UserResponse[]> {
-    const skip = (page - 1) * limit;
-    const users = await UserModel.find()
-      .skip(skip)
-      .limit(limit)
-      .select("-password")
-      .lean()
-      .exec();
-
-    return users.map((user) => ({
-      _id: user._id,
-      username: user.username,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    }));
-  }
-
   async getSelfUser(userId: string): Promise<UserResponse> {
     const user = await UserModel.findById(userId)
       .select("-password")

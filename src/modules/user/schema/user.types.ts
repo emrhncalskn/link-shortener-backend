@@ -19,8 +19,3 @@ export interface CreateUserInput {
   username: string;
   password: string;
 }
-
-export interface UpdateUserInput {
-  username?: string;
-  password?: string;
-}

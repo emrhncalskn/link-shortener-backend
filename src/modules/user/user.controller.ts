@@ -7,12 +7,6 @@ export class UserController extends BaseController {
     super();
   }
 
-  getAll = async (req: Request, res: Response): Promise<void> => {
-    await this.handleRequest(req, res, async () => {
-      return await this.userService.getAllUsers();
-    });
-  };
-
   getSelfUser = async (req: Request, res: Response): Promise<void> => {
     await this.handleRequest(req, res, async () => {
       const userId = (req as any).user?.id;

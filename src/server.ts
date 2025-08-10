@@ -12,7 +12,7 @@ async function main() {
     console.log(`Server has started on "http://localhost:${port}"`)
   );
   // Sync all indexes in the database
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV === "development") {
     await syncAllIndexes();
   }
 

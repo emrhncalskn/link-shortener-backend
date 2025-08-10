@@ -10,9 +10,6 @@ const router = Router();
 const userService = new UserService();
 const userController = new UserController(userService);
 
-// Get all users
-router.get("/all", userController.getAll);
-
 // Get self user
 router.get("/", authGuard, userController.getSelfUser);
 
