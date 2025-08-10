@@ -69,6 +69,7 @@ Kimlik doğrulama gereken endpointler Authorization: `Bearer <JWT>` başlığı 
 | ------ | -------------- | ----- | ------------------------------------ | ---------------------- |
 | POST   | /auth/register | Hayır | Yeni kullanıcı oluşturur & JWT döner | { username, password } |
 | POST   | /auth/login    | Hayır | Giriş yapar & JWT döner              | { username, password } |
+| GET    | /auth/check    | Evet  | Authenticated mı?                    | -                      |
 
 ### User
 
