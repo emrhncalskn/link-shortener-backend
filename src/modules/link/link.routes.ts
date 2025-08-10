@@ -2,7 +2,11 @@ import { Router } from "express";
 import { LinkService } from "./link.service";
 import { LinkController } from "./link.controller";
 import { validate } from "../../utils/validate";
-import { createLinkSchema, redirectLinkSchema } from "./schema/link.schema";
+import {
+  createLinkSchema,
+  redirectLinkSchema,
+  updateLinkSchema,
+} from "./schema/link.schema";
 import { authGuard } from "../auth/auth.guard";
 
 const router = Router();
@@ -24,6 +28,13 @@ router.get(
   validate(redirectLinkSchema),
   authGuard,
   linkController.getLinkStats
+);
+
+router.put(
+  "/:slug",
+  validate(updateLinkSchema),
+  authGuard,
+  linkController.updateLinkCustomCode
 );
 
 router.delete(

@@ -1,12 +1,12 @@
-import { LinkModel, LinkClickModel } from "./schema/link.model";
+import { CHARS } from "../../constants/chars.constant";
+import { httpException, HttpException } from "../../utils/response";
+import { LinkClickModel, LinkModel } from "./schema/link.model";
 import {
   CreateLinkInput,
   Link,
-  LinkResponse,
   LinkClick,
+  LinkResponse,
 } from "./schema/link.types";
-import { httpException, HttpException } from "../../utils/response";
-import { CHARS } from "../../constants/chars.constant";
 
 export class LinkService {
   private generateShortCode(length: number = 10): string {
@@ -78,7 +78,6 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      console.error("Error creating link:", error);
       throw httpException.internalServerError("Failed to create link");
     }
   }
@@ -87,7 +86,6 @@ export class LinkService {
     try {
       return await LinkModel.findOne({ shortCode }).lean<Link>().exec();
     } catch (error) {
-      console.error("Error getting link by short code:", error);
       throw httpException.internalServerError("Failed to retrieve link");
     }
   }
@@ -115,7 +113,6 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      console.error("Error redirecting link:", error);
       throw httpException.internalServerError("Failed to redirect link");
     }
   }
@@ -171,7 +168,6 @@ export class LinkService {
         totalPages,
       };
     } catch (error) {
-      console.error("Error getting all links:", error);
       throw httpException.internalServerError("Failed to retrieve links");
     }
   }
@@ -210,6 +206,49 @@ export class LinkService {
     }
   }
 
+  async updateLink(
+    shortCode: string,
+    newShortCode?: string,
+    userId?: string
+  ): Promise<LinkResponse> {
+    try {
+      const filter: any = { shortCode };
+      if (userId) {
+        filter.userId = userId;
+      }
+
+      const existingLink = await LinkModel.findOne(filter).exec();
+      if (!existingLink) {
+        throw httpException.notFound("Link not found");
+      }
+
+      if (newShortCode && newShortCode !== shortCode) {
+        const existingCodeLink = await LinkModel.findOne({
+          shortCode: newShortCode,
+        }).exec();
+        if (existingCodeLink) {
+          throw httpException.conflict("New short code already exists");
+        }
+      }
+
+      const updatedLink = await LinkModel.findOneAndUpdate(
+        filter,
+        { $set: { shortCode: newShortCode || existingLink.shortCode } },
+        { new: true }
+      ).exec();
+      if (!updatedLink) {
+        throw httpException.notFound("Link not found");
+      }
+
+      return this.formatLinkResponse(updatedLink);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw httpException.internalServerError("Failed to update link");
+    }
+  }
+
   async deleteLink(shortCode: string, userId?: string): Promise<void> {
     try {
       const filter: any = { shortCode };
@@ -227,7 +266,6 @@ export class LinkService {
       if (error instanceof HttpException) {
         throw error;
       }
-      console.error("Error deleting link:", error);
       throw httpException.internalServerError("Failed to delete link");
     }
   }

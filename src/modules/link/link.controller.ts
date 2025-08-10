@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../common/base.controller";
-import { LinkService } from "./link.service";
 import { HttpException } from "../../utils/response";
+import { LinkService } from "./link.service";
 
 export class LinkController extends BaseController {
   constructor(private linkService: LinkService) {
@@ -66,6 +66,16 @@ export class LinkController extends BaseController {
       const userId = (req as any).user?.id;
 
       return await this.linkService.getLinkStats(slug, userId);
+    });
+  };
+
+  updateLinkCustomCode = async (req: Request, res: Response): Promise<void> => {
+    await this.handleRequest(req, res, async () => {
+      const { slug } = req.params;
+      const { newShortCode } = req.body;
+      const userId = (req as any).user?.id;
+
+      return await this.linkService.updateLink(slug, newShortCode, userId);
     });
   };
 

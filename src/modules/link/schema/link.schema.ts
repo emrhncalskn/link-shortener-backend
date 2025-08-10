@@ -24,5 +24,23 @@ export const redirectLinkSchema = z.object({
   }),
 });
 
+export const updateLinkSchema = z.object({
+  body: z.object({
+    newShortCode: z
+      .string()
+      .min(3, "New short code must be at least 3 characters")
+      .max(20, "New short code must be at most 20 characters")
+      .regex(
+        /^[a-zA-Z0-9-_]+$/,
+        "New short code can only contain letters, numbers, hyphens and underscores"
+      )
+      .optional(),
+  }),
+  params: z.object({
+    slug: z.string().min(1, "Slug is required").max(20, "Slug is too long"),
+  }),
+});
+
 export type CreateLinkRequest = z.TypeOf<typeof createLinkSchema>;
 export type RedirectLinkRequest = z.TypeOf<typeof redirectLinkSchema>;
+export type UpdateLinkRequest = z.TypeOf<typeof updateLinkSchema>;
