@@ -21,11 +21,11 @@ export class UserService {
     }));
   }
 
-  async getSelfUser(token: string): Promise<UserResponse> {
-    const decoded = decode(token, { complete: true });
-    const { id } = decoded!.payload as { id: string };
-
-    const user = await UserModel.findById(id).select("-password").lean().exec();
+  async getSelfUser(userId: string): Promise<UserResponse> {
+    const user = await UserModel.findById(userId)
+      .select("-password")
+      .lean()
+      .exec();
     if (!user) {
       throw httpException.notFound("User not found");
     }
@@ -64,13 +64,10 @@ export class UserService {
   }
 
   async updateUser(
-    token: string,
+    userId: string,
     userData: Partial<CreateUserInput>
   ): Promise<UserResponse> {
-    const decoded = decode(token, { complete: true });
-    const { id } = decoded!.payload as { id: string };
-
-    const user = await UserModel.findById(id).exec();
+    const user = await UserModel.findById(userId).exec();
     if (!user) {
       throw httpException.notFound("User not found");
     }
@@ -88,8 +85,8 @@ export class UserService {
     }
   }
 
-  async deleteUser(token: string): Promise<void> {
-    const user = await this.getSelfUser(token);
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.getSelfUser(userId);
     try {
       await UserModel.findByIdAndDelete(user._id).exec();
       return;
