@@ -7,11 +7,11 @@ export function createApp() {
 
   app.use("/api", api);
 
-  app.use((_req, res) => res.status(404).json({ message: "Not found" }));
+  app.use((_req, res) => res.status(404).json({ message: "Route Not Found" }));
   app.use((err: any, _req: any, res: any, _next: any) => {
-    res
-      .status(err?.status ?? 500)
-      .json({ message: err?.message ?? "Internal Server Error" });
+    const statusCode = err?.statusCode ?? err?.status ?? 500;
+    const message = err?.message ?? "Internal Server Error";
+    res.status(statusCode).json({ message });
   });
   return app;
 }

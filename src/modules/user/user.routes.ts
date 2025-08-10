@@ -2,11 +2,8 @@ import { Router } from "express";
 import { UserService } from "./user.service";
 import { UserController } from "./user.controller";
 import { validate } from "../../utils/validate";
-import {
-  createUserSchema,
-  getUserSchema,
-  updateUserSchema,
-} from "./schema/user.schema";
+import { updateUserSchema } from "./schema/user.schema";
+import { authGuard } from "../auth/auth.guard";
 
 const router = Router();
 
@@ -14,18 +11,15 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 // Get all users
-router.get("/", userController.getAll);
+router.get("/all", userController.getAll);
 
-// Get user by ID
-router.get("/:id", validate(getUserSchema), userController.getById);
-
-// Create a new user
-router.post("/", validate(createUserSchema), userController.create);
+// Get self user
+router.get("/", authGuard, userController.getSelfUser);
 
 // Update user
-router.put("/:id", validate(updateUserSchema), userController.update);
+router.put("/", validate(updateUserSchema), authGuard, userController.update);
 
 // Delete user
-router.delete("/:id", validate(getUserSchema), userController.delete);
+router.delete("/", authGuard, userController.delete);
 
 export default router;

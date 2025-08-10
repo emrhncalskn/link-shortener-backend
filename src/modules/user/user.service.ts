@@ -1,3 +1,4 @@
+import { decode } from "jsonwebtoken";
 import { httpException } from "../../utils/response";
 import { UserModel } from "./schema/user.model";
 import { CreateUserInput, User, UserResponse } from "./schema/user.types";
@@ -20,9 +21,11 @@ export class UserService {
     }));
   }
 
-  async getUserById(id: string): Promise<UserResponse> {
-    const user = await UserModel.findById(id).select("-password").lean().exec();
+  async getSelfUser(token: string): Promise<UserResponse> {
+    const decoded = decode(token, { complete: true });
+    const { id } = decoded!.payload as { id: string };
 
+    const user = await UserModel.findById(id).select("-password").lean().exec();
     if (!user) {
       throw httpException.notFound("User not found");
     }
@@ -61,9 +64,12 @@ export class UserService {
   }
 
   async updateUser(
-    id: string,
+    token: string,
     userData: Partial<CreateUserInput>
   ): Promise<UserResponse> {
+    const decoded = decode(token, { complete: true });
+    const { id } = decoded!.payload as { id: string };
+
     const user = await UserModel.findById(id).exec();
     if (!user) {
       throw httpException.notFound("User not found");
@@ -82,13 +88,10 @@ export class UserService {
     }
   }
 
-  async deleteUser(id: string): Promise<void> {
-    const user = await this.getUserById(id);
-    if (!user) {
-      throw httpException.notFound("User not found");
-    }
+  async deleteUser(token: string): Promise<void> {
+    const user = await this.getSelfUser(token);
     try {
-      await UserModel.findByIdAndDelete(id).exec();
+      await UserModel.findByIdAndDelete(user._id).exec();
       return;
     } catch (error) {
       throw httpException.internalServerError("Failed to delete user");
