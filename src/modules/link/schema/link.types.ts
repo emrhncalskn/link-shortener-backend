@@ -1,15 +1,5 @@
 import { Types } from "mongoose";
 
-export interface Link {
-  _id: Types.ObjectId | string;
-  originalUrl: string;
-  shortCode: string;
-  clicks: number;
-  userId?: Types.ObjectId | string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface LinkResponse {
   _id: Types.ObjectId | string;
   originalUrl: string;

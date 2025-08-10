@@ -1,12 +1,7 @@
 import { CHARS } from "../../constants/chars.constant";
 import { httpException, HttpException } from "../../utils/response";
 import { LinkClickModel, LinkModel } from "./schema/link.model";
-import {
-  CreateLinkInput,
-  Link,
-  LinkClick,
-  LinkResponse,
-} from "./schema/link.types";
+import { CreateLinkInput, LinkClick, LinkResponse } from "./schema/link.types";
 
 export class LinkService {
   private generateShortCode(length: number = 10): string {
@@ -79,14 +74,6 @@ export class LinkService {
         throw error;
       }
       throw httpException.internalServerError("Failed to create link");
-    }
-  }
-
-  async getLinkByShortCode(shortCode: string): Promise<Link | null> {
-    try {
-      return await LinkModel.findOne({ shortCode }).lean<Link>().exec();
-    } catch (error) {
-      throw httpException.internalServerError("Failed to retrieve link");
     }
   }
 
