@@ -50,7 +50,6 @@ export class HttpException extends Error {
     Error.captureStackTrace(this, HttpException);
   }
 
-  // Send error response using ApiResponse
   sendResponse(res: Response): void {
     ApiResponse.error(res, this.message, this.statusCode, this.details);
   }
