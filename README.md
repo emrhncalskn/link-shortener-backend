@@ -30,7 +30,22 @@ MONGODB_URI=mongodb://root:admin@localhost:27017/appdb?authSource=admin
 JWT_SECRET=super-secret-key
 BASE_URL=http://localhost:3000
 NODE_ENV=development
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:3000,http://localhost:3001,http://localhost:5173
 ```
+
+### CORS Konfigürasyonu
+
+Server otomatik olarak CORS desteği içerir:
+
+- **CORS_ORIGIN**: İzin verilen origin'ler (virgülle ayrılmış)
+- Varsayılan: `http://localhost:3000,http://localhost:3001`
+- Development için React/Vue/Angular uygulamaları ekleyebilirsiniz
+- Production'da gerçek domain'inizi ekleyin
+
+Desteklenen HTTP metodları: `GET, POST, PUT, DELETE, PATCH, OPTIONS`
+İzin verilen headers: `Content-Type, Authorization`
 
 ## Çalıştırma
 
@@ -51,9 +66,10 @@ Mongo Express: http://localhost:8081
 ```
 src/
   server.ts   # başlatma
-  app.ts      # express app
+  app.ts      # express app (CORS dahil)
   modules/    # auth, user, link
   utils/      # validate, encrypt, jwt, response
+  constants/  # error & success messages (TR)
   db/         # mongoose bağlantı & index sync
 ```
 
