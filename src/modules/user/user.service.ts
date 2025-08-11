@@ -1,8 +1,7 @@
-import { decode } from "jsonwebtoken";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 import { httpException } from "../../utils/response";
 import { UserModel } from "./schema/user.model";
 import { CreateUserInput, User, UserResponse } from "./schema/user.types";
-import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class UserService {
   async getSelfUser(userId: string): Promise<UserResponse> {

@@ -1,8 +1,8 @@
 import { CHARS } from "../../constants/chars.constant";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 import { httpException, HttpException } from "../../utils/response";
 import { LinkClickModel, LinkModel } from "./schema/link.model";
 import { CreateLinkInput, LinkClick, LinkResponse } from "./schema/link.types";
-import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class LinkService {
   private generateShortCode(length: number = 10): string {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../common/base.controller";
 import { AuthService } from "./auth.service";
-import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
+import { SUCCESS_MESSAGES } from "../../constants/success-messages.constant";
 
 export class AuthController extends BaseController {
   constructor(private authService: AuthService) {
@@ -24,8 +24,16 @@ export class AuthController extends BaseController {
 
   checkAuth = async (req: Request, res: Response): Promise<void> => {
     await this.handleRequest(req, res, async () => {
+      const user = (req as any).user;
+      const token = req.headers.authorization?.slice(7); // Remove "Bearer " prefix
+
       return {
-        message: ERROR_MESSAGES.AUTHENTICATED,
+        message: SUCCESS_MESSAGES.AUTHENTICATED,
+        token,
+        user: {
+          id: user.id,
+          username: user.username,
+        },
       };
     });
   };

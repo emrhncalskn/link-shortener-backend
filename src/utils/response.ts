@@ -1,12 +1,13 @@
 import { Response } from "express";
 import { ERROR_MESSAGES } from "../constants/error-messages.constant";
+import { SUCCESS_MESSAGES } from "../constants/success-messages.constant";
 
 export class ApiResponse {
   // Success response
   static success(
     res: Response,
     data: any = null,
-    message: string = "Success",
+    message: string = SUCCESS_MESSAGES.OPERATION_SUCCESSFUL,
     statusCode: number = 200
   ): void {
     res.status(statusCode).json({

@@ -1,8 +1,8 @@
 import { sign } from "jsonwebtoken";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 import { comparePassword } from "../../utils/encrypt";
 import { HttpException } from "../../utils/response";
 import { UserService } from "../user/user.service";
-import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
 
 export class AuthService {
   private userService: UserService;

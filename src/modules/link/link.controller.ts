@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../common/base.controller";
+import { ERROR_MESSAGES } from "../../constants/error-messages.constant";
+import { SUCCESS_MESSAGES } from "../../constants/success-messages.constant";
 import { HttpException } from "../../utils/response";
 import { LinkService } from "./link.service";
 
@@ -43,7 +45,7 @@ export class LinkController extends BaseController {
       } else {
         res.status(500).json({
           success: false,
-          message: "Internal server error",
+          message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
           timestamp: new Date().toISOString(),
         });
       }
@@ -85,7 +87,7 @@ export class LinkController extends BaseController {
       const userId = (req as any).user?.id;
 
       await this.linkService.deleteLink(slug, userId);
-      return { message: "Link deleted successfully" };
+      return { message: SUCCESS_MESSAGES.LINK_DELETED };
     });
   };
 }
